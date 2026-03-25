@@ -1,0 +1,54 @@
+{
+  "folders": [
+    {
+      "id": "dashboard",
+      "label": "Dashboard",
+      "type": "top-level",
+      "slug": "index.php"
+    },
+    {
+      "id": "design",
+      "label": "Design",
+      "type": "drilldown",
+      "slug": "themes.php",
+      "firstItemLabel": "Themes",
+      "description": "Customize the appearance of your website using the block editor."
+    },
+    {
+      "id": "site",
+      "label": "Site",
+      "type": "folder",
+      "slugs": [
+        "edit.php",
+        "upload.php",
+        "edit.php?post_type=page",
+        "edit-comments.php"
+      ],
+      "includeCPTs": true
+    },
+    {
+      "id": "settings",
+      "label": "Settings",
+      "type": "drilldown",
+      "placement": "footer",
+      "slug": "options-general.php",
+      "firstItemLabel": "General",
+      "additionalSlugs": [ "users.php", "tools.php" ],
+      "description": "Configure site settings, including general options, permalinks, and more."
+    },
+    {
+      "id": "extensions",
+      "label": "Extensions",
+      "type": "folder",
+      "slugs": [
+        "plugins.php",
+        "plugin-install.php",
+        "plugin-editor.php"
+      ],
+      "catchRemaining": true
+    }
+  ],
+  "childFilters": {
+    "index.php": { "stripAll": true }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "wordpress-navigation",
+  "version": "0.1.0",
+  "description": "A rethought left navigation for the WordPress admin.",
+  "scripts": {
+    "build": "wp-scripts build",
+    "start": "wp-scripts start"
+  },
+  "devDependencies": {
+    "@wordpress/scripts": "^27.0.0"
+  },
+  "dependencies": {
+    "@wordpress/icons": "^12.0.0"
+  }
+}
