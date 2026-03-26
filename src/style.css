@@ -492,6 +492,55 @@
 	color: var(--wn-text);
 }
 
+/* ── Star button (WP page header — light context) ───────── */
+
+#wn-star-root {
+	display: inline-flex;
+	align-items: center;
+	vertical-align: middle;
+	margin-left: 8px;
+}
+
+.wn-star {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 28px;
+	height: 28px;
+	padding: 0;
+	background: none;
+	border: 1px solid transparent;
+	border-radius: 4px;
+	cursor: pointer;
+	color: #72777c;
+	transition: color 0.12s, border-color 0.12s;
+}
+
+.wn-star:hover {
+	color: #1d2327;
+	border-color: #c3c4c7;
+}
+
+.wn-star--active {
+	color: #dba617;
+}
+
+.wn-star--active:hover {
+	color: #b88900;
+}
+
+.wn-star:disabled {
+	opacity: 0.5;
+	cursor: wait;
+}
+
+.wn-star svg {
+	width: 20px;
+	height: 20px;
+	display: block;
+	fill: currentColor;
+}
+
 /* ── Sidebar footer ────────────────────────────────────── */
 
 .wn-footer {
@@ -500,7 +549,7 @@
 	align-items: center;
 	justify-content: space-between;
 	height: 52px;
-	padding: 0 8px;
+	padding: 0 12px;
 	border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
@@ -515,8 +564,8 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 36px;
-	height: 36px;
+	width: 32px;
+	height: 32px;
 	background: none;
 	border: none;
 	border-radius: var(--wn-radius);

@@ -17,6 +17,81 @@ class WP_Navigation {
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue' ] );
 		add_action( 'admin_head',            [ $this, 'inject_scheme_vars' ] );
 		add_action( 'admin_footer',          [ $this, 'output_data' ], 1 );
+		add_action( 'rest_api_init',         [ $this, 'register_rest_routes' ] );
+	}
+
+	/**
+	 * REST API routes for reading and writing per-user favorites.
+	 */
+	public function register_rest_routes() {
+		register_rest_route( 'wn/v1', '/favorites', [
+			[
+				'methods'             => 'GET',
+				'callback'            => [ $this, 'rest_get_favorites' ],
+				'permission_callback' => fn() => is_user_logged_in(),
+			],
+			[
+				'methods'             => 'POST',
+				'callback'            => [ $this, 'rest_add_favorite' ],
+				'permission_callback' => fn() => is_user_logged_in(),
+				'args'                => [
+					'slug'  => [ 'required' => true, 'sanitize_callback' => 'sanitize_text_field' ],
+					'label' => [ 'required' => true, 'sanitize_callback' => 'sanitize_text_field' ],
+					'icon'  => [ 'required' => true, 'sanitize_callback' => 'sanitize_text_field' ],
+				],
+			],
+		] );
+
+		register_rest_route( 'wn/v1', '/favorites/(?P<slug>[^/]+)', [
+			'methods'             => 'DELETE',
+			'callback'            => [ $this, 'rest_delete_favorite' ],
+			'permission_callback' => fn() => is_user_logged_in(),
+		] );
+	}
+
+	public function rest_get_favorites(): WP_REST_Response {
+		return rest_ensure_response( $this->get_user_favorites() );
+	}
+
+	public function rest_add_favorite( WP_REST_Request $req ): WP_REST_Response {
+		$favs = $this->get_user_favorites();
+		$slug = $req->get_param( 'slug' );
+
+		// Idempotent — only add if not already present.
+		foreach ( $favs as $f ) {
+			if ( $f['slug'] === $slug ) {
+				return rest_ensure_response( $f );
+			}
+		}
+
+		$new    = [
+			'slug'  => $slug,
+			'label' => $req->get_param( 'label' ),
+			'icon'  => $req->get_param( 'icon' ),
+		];
+		$favs[] = $new;
+		$this->save_user_favorites( $favs );
+		return rest_ensure_response( $new );
+	}
+
+	public function rest_delete_favorite( WP_REST_Request $req ): WP_REST_Response {
+		$slug = urldecode( $req->get_param( 'slug' ) );
+		$favs = array_values( array_filter(
+			$this->get_user_favorites(),
+			fn( $f ) => $f['slug'] !== $slug
+		) );
+		$this->save_user_favorites( $favs );
+		return rest_ensure_response( [ 'deleted' => true ] );
+	}
+
+	private function get_user_favorites(): array {
+		$raw     = get_user_meta( get_current_user_id(), 'wn_favorites', true );
+		$decoded = json_decode( $raw ?: '[]', true );
+		return is_array( $decoded ) ? $decoded : [];
+	}
+
+	private function save_user_favorites( array $favs ): void {
+		update_user_meta( get_current_user_id(), 'wn_favorites', wp_json_encode( $favs ) );
 	}
 
 	/**
@@ -113,6 +188,9 @@ class WP_Navigation {
 				'taxonomy' => sanitize_text_field( $_GET['taxonomy']  ?? '' ),
 			],
 			'adminUrl'    => admin_url(),
+			'favorites'   => $this->get_user_favorites(),
+			'restUrl'     => rest_url( 'wn/v1/' ),
+			'restNonce'   => wp_create_nonce( 'wp_rest' ),
 		];
 
 		echo '<script>window.wpNavData = ' . wp_json_encode( $data ) . ';</script>' . "\n";

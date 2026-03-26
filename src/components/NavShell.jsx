@@ -1,9 +1,10 @@
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { cog } from '@wordpress/icons';
 import NavFolder from './NavFolder';
 import NavItem from './NavItem';
 import NavDrilldownItem from './NavDrilldownItem';
 import NavDrilldown from './NavDrilldown';
+import { effectiveSlug } from '../utils';
 
 function buildNavTree( menuItems, config ) {
 	const assignedSlugs = new Set();
@@ -56,13 +57,6 @@ function buildNavTree( menuItems, config ) {
 	} );
 }
 
-function effectiveSlug( currentPage ) {
-	const { file, postType, taxonomy } = currentPage;
-	if ( postType ) return `${ file }?post_type=${ postType }`;
-	if ( taxonomy ) return `${ file }?taxonomy=${ taxonomy }`;
-	return file;
-}
-
 export function isExactItemActive( item, currentPage ) {
 	const slug = effectiveSlug( currentPage );
 	const { page } = currentPage;
@@ -87,12 +81,52 @@ const FOOTER_ICONS = {
 };
 
 export default function NavShell( { data } ) {
-	const { menuItems = [], config = {}, currentPage = {} } = data;
+	const { menuItems = [], config = {}, currentPage = {}, favorites: initialFavorites = [] } = data;
+
+	const [ favorites, setFavorites ] = useState( initialFavorites );
+
+	useEffect( () => {
+		function onFavoriteToggled( event ) {
+			const { slug, label, icon, favorited } = event.detail;
+			setFavorites( ( prev ) => {
+				if ( favorited ) {
+					return prev.some( ( f ) => f.slug === slug )
+						? prev
+						: [ ...prev, { slug, label, icon } ];
+				}
+				return prev.filter( ( f ) => f.slug !== slug );
+			} );
+		}
+		window.addEventListener( 'wn:favorite-toggled', onFavoriteToggled );
+		return () => window.removeEventListener( 'wn:favorite-toggled', onFavoriteToggled );
+	}, [] );
 
 	const navTree = useMemo( () => buildNavTree( menuItems, config ), [ menuItems, config ] );
 
 	const mainEntries   = navTree.filter( ( e ) => e.placement !== 'footer' );
 	const footerEntries = navTree.filter( ( e ) => e.placement === 'footer' );
+
+	const favoritesFolder = useMemo( () => {
+		if ( ! favorites.length ) return null;
+		const items = favorites.map( ( fav ) => {
+			const found =
+				menuItems.find( ( m ) => m.slug === fav.slug ) ||
+				menuItems.flatMap( ( m ) => m.children || [] ).find( ( c ) => c.slug === fav.slug );
+			return found ?? { slug: fav.slug, label: fav.label, url: '#', children: [] };
+		} );
+		return { id: 'favorites', label: 'Favorites', type: 'folder', items };
+	}, [ favorites, menuItems ] );
+
+	const mainEntriesWithFavorites = useMemo( () => {
+		if ( ! favoritesFolder ) return mainEntries;
+		const siteIdx = mainEntries.findIndex( ( e ) => e.id === 'site' );
+		const at      = siteIdx >= 0 ? siteIdx + 1 : mainEntries.length;
+		return [
+			...mainEntries.slice( 0, at ),
+			favoritesFolder,
+			...mainEntries.slice( at ),
+		];
+	}, [ mainEntries, favoritesFolder ] );
 
 	const [ drilldown, setDrilldown ] = useState( () =>
 		navTree.find(
@@ -110,7 +144,7 @@ export default function NavShell( { data } ) {
 				<div className={ `wn-panel wn-panel--main${ drilldown ? ' wn-panel--shifted' : '' }` }>
 					<nav className="wn-nav" role="navigation" aria-label="Admin Navigation">
 						<ul className="wn-nav__list">
-							{ mainEntries.map( ( entry ) => {
+							{ mainEntriesWithFavorites.map( ( entry ) => {
 								if ( entry.type === 'top-level' ) {
 									return entry.item ? (
 										<NavItem
