@@ -52,6 +52,7 @@
 	flex-direction: column;
 	height: 100%;
 	background: var(--wn-bg);
+	view-transition-name: wn-sidebar;
 }
 
 /* ── Slide panels ──────────────────────────────────────── */
