@@ -66,7 +66,7 @@ function LegacyIcon( { icon } ) {
 	if ( icon.startsWith( 'data:image' ) || icon.startsWith( 'http' ) ) {
 		return (
 			<span className="wn-item__icon wn-item__icon--legacy" aria-hidden="true">
-				<img src={ icon } alt="" />
+				<span className="wn-item__icon--mask" style={ { '--icon-src': `url(${ icon })` } } />
 			</span>
 		);
 	}

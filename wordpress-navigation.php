@@ -38,6 +38,8 @@ class WP_Navigation {
 		$sanitize = fn( $v ) => preg_match( '/^#[0-9a-f]{3,8}$/i', $v ) ? esc_attr( $v ) : null;
 
 		$vars = array_filter( [
+			// colors[0] = primary sidebar background for the current scheme.
+			'--wn-scheme-bg'      => $sanitize( $c[0] ?? '' ),
 			// colors[2] = accent / active-item highlight.
 			'--wn-scheme-accent'  => $sanitize( $c[2] ?? '' ),
 			// icon_colors.base = default icon/text colour on the dark bg.
