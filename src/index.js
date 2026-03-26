@@ -5,20 +5,24 @@ import { isExactItemActive } from './components/NavShell';
 import './style.css';
 
 function init() {
-	const { menuItems = [], currentPage = {}, favorites = [] } = window.wpNavData ?? {};
+	const { menuItems = [], currentPage = {}, favorites = [] } = window.wnNavData ?? {};
 
 	// ── Main nav ──────────────────────────────────────────────
+	// Append our root rather than replacing innerHTML. This keeps #adminmenu
+	// in the DOM so WordPress's common.js can read menu state and call
+	// window.wpNavMenuClassChange with valid data — required by Jetpack and
+	// other plugins that override that function.
 	const wrap = document.getElementById( 'adminmenuwrap' );
-	if ( wrap && window.wpNavData ) {
-		wrap.innerHTML = '<div id="wn-root"></div>';
-		createRoot( document.getElementById( 'wn-root' ) ).render(
-			<NavShell data={ window.wpNavData } />
-		);
+	if ( wrap && window.wnNavData ) {
+		const wn = document.createElement( 'div' );
+		wn.id = 'wn-root';
+		wrap.appendChild( wn );
+		createRoot( wn ).render( <NavShell data={ window.wnNavData } /> );
 	}
 
 	// ── Star button ───────────────────────────────────────────
 	const heading = document.querySelector( '.wp-heading-inline' );
-	if ( ! heading || ! window.wpNavData ) return;
+	if ( ! heading || ! window.wnNavData ) return;
 
 	// Find the menu item for the current page using the same active-state
 	// logic as the nav, so plugin pages (admin.php?page=xxx) match correctly.

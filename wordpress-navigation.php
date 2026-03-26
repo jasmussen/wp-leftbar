@@ -193,7 +193,7 @@ class WP_Navigation {
 			'restNonce'   => wp_create_nonce( 'wp_rest' ),
 		];
 
-		echo '<script>window.wpNavData = ' . wp_json_encode( $data ) . ';</script>' . "\n";
+		echo '<script>window.wnNavData = ' . wp_json_encode( $data ) . ';</script>' . "\n";
 	}
 
 	private function collect_menu( $menu, $submenu ) {

@@ -1,9 +1,9 @@
 const getHeaders = () => ( {
 	'Content-Type': 'application/json',
-	'X-WP-Nonce':   window.wpNavData?.restNonce ?? '',
+	'X-WP-Nonce':   window.wnNavData?.restNonce ?? '',
 } );
 
-const baseUrl = () => window.wpNavData?.restUrl ?? '';
+const baseUrl = () => window.wnNavData?.restUrl ?? '';
 
 export async function apiFavoriteAdd( { slug, label, icon } ) {
 	const res = await fetch( baseUrl() + 'favorites', {
