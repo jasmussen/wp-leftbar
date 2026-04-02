@@ -223,6 +223,14 @@ class WP_Navigation {
 			];
 
 			if ( isset( $submenu[ $slug ] ) && is_array( $submenu[ $slug ] ) ) {
+				$first_sub = reset( $submenu[ $slug ] );
+				if ( ! empty( $first_sub[2] ) ) {
+					// Use the first submenu item's URL as the parent URL — matches native WP
+					// menu behaviour where top-level links resolve to the first child (e.g.
+					// WooCommerce's slug is 'woocommerce' but its real home is 'wc-admin').
+					$item['url'] = $this->resolve_url( $first_sub[2], $slug );
+				}
+
 				foreach ( $submenu[ $slug ] as $sub_pos => $sub ) {
 					if ( empty( $sub[2] ) ) {
 						continue;

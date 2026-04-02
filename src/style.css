@@ -204,6 +204,7 @@
 .wn-item--active > .wn-item__row > .wn-item__link {
 	background: var(--wn-bg-active);
 	color: var(--wn-text);
+	font-weight: 600;
 }
 
 .wn-item__label {
@@ -359,7 +360,6 @@
 
 .wn-item:not(.wn-folder .wn-item) > .wn-item__row > .wn-item__link {
 	color: var(--wn-text-sub);
-	font-weight: 500;
 }
 
 /* ── Drilldown trigger (Design, etc.) ──────────────────── */
@@ -375,7 +375,7 @@
 	cursor: pointer;
 	font-family: var(--wn-font);
 	font-size: 13px;
-	font-weight: 500;
+	font-weight: 400;
 	color: var(--wn-text-sub);
 	text-align: left;
 	padding: 0 12px 0 4px;
@@ -394,6 +394,7 @@
 .wn-item--drilldown.wn-item--active > .wn-item__row > .wn-item__link--drill {
 	background: var(--wn-bg-active);
 	color: var(--wn-text);
+	font-weight: 600;
 }
 
 /* Right-pointing arrow on drilldown items */
