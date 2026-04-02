@@ -596,3 +596,94 @@
 	display: block;
 	fill: currentColor;
 }
+
+/* ── Bottom bar (mobile only — hidden on desktop) ───────── */
+
+.wn-bottombar {
+	display: none;
+}
+
+/* ── Responsive: ≤ 782px ────────────────────────────────── */
+
+@media (max-width: 782px) {
+	/* Collapse adminmenuwrap to nothing; override WP's display:none so our
+	   fixed children remain in the paint tree. */
+	#adminmenuwrap {
+		display: block !important;
+		width: 0 !important;
+		height: 0 !important;
+		overflow: visible !important;
+	}
+
+	/* Content fills full width; bottom padding clears the bottom bar. */
+	#wpcontent,
+	#wpfooter {
+		margin-left: 0 !important;
+		padding-bottom: 56px;
+	}
+
+	/* Sidebar: break out of the collapsed parent and slide off-screen. */
+	#wn-root {
+		position: fixed !important;
+		top: 32px;
+		left: 0;
+		bottom: 56px;
+		width: 284px;
+		transform: translateX( -100% );
+		transition: transform 0.22s ease;
+		z-index: 9992;
+	}
+
+	#wn-root.wn-nav-open {
+		transform: translateX( 0 );
+	}
+
+	/* Dimming overlay rendered behind the open sidebar. */
+	.wn-nav-overlay {
+		position: fixed;
+		inset: 0;
+		background: rgba( 0, 0, 0, 0.5 );
+		z-index: 9990;
+	}
+
+	/* Bottom bar. */
+	.wn-bottombar {
+		display: flex;
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		height: 56px;
+		background: var( --wn-bg );
+		border-top: 1px solid rgba( 255, 255, 255, 0.1 );
+		z-index: 9991;
+	}
+}
+
+.wn-bottombar__btn {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 3px;
+	background: none;
+	border: none;
+	color: var( --wn-text-sub );
+	font-size: 11px;
+	font-family: var( --wn-font );
+	cursor: pointer;
+	padding: 0;
+	text-decoration: none;
+}
+
+.wn-bottombar__icon svg {
+	width: 20px;
+	height: 20px;
+	display: block;
+	fill: currentColor;
+}
+
+.wn-bottombar__btn--active {
+	color: var( --wn-text );
+}

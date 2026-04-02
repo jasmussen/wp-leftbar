@@ -4,6 +4,7 @@ import NavFolder from './NavFolder';
 import NavItem from './NavItem';
 import NavDrilldownItem from './NavDrilldownItem';
 import NavDrilldown from './NavDrilldown';
+import BottomBar from './BottomBar';
 import { effectiveSlug } from '../utils';
 
 function buildNavTree( menuItems, config ) {
@@ -81,7 +82,7 @@ const FOOTER_ICONS = {
 };
 
 export default function NavShell( { data } ) {
-	const { menuItems = [], config = {}, currentPage = {}, favorites: initialFavorites = [] } = data;
+	const { menuItems = [], config = {}, currentPage = {}, favorites: initialFavorites = [], adminUrl = '' } = data;
 
 	const [ favorites, setFavorites ] = useState( initialFavorites );
 
@@ -138,6 +139,15 @@ export default function NavShell( { data } ) {
 		setDrilldown( ( prev ) => ( prev?.id === entry.id ? null : entry ) );
 	}
 
+	const [ isNavOpen, setIsNavOpen ] = useState( false );
+
+	useEffect( () => {
+		const root = document.getElementById( 'wn-root' );
+		if ( root ) root.classList.toggle( 'wn-nav-open', isNavOpen );
+	}, [ isNavOpen ] );
+
+	const settingsEntry = footerEntries.find( ( e ) => e.id === 'settings' );
+
 	return (
 		<>
 			<div className="wn-panels">
@@ -189,6 +199,17 @@ export default function NavShell( { data } ) {
 					) }
 				</div>
 			</div>
+
+			<BottomBar
+				adminUrl={ adminUrl }
+				isNavOpen={ isNavOpen }
+				onMenuToggle={ () => setIsNavOpen( ( v ) => ! v ) }
+				onSettings={ () => {
+					if ( settingsEntry ) openDrilldown( settingsEntry );
+					setIsNavOpen( false );
+				} }
+				settingsActive={ drilldown?.id === 'settings' }
+			/>
 
 			{ footerEntries.length > 0 && (
 				<footer className="wn-footer">
