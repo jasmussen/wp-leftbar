@@ -206,7 +206,7 @@ export default function NavShell( { data } ) {
 				onMenuToggle={ () => setIsNavOpen( ( v ) => ! v ) }
 				onSettings={ () => {
 					if ( settingsEntry ) openDrilldown( settingsEntry );
-					setIsNavOpen( false );
+					setIsNavOpen( true );
 				} }
 				settingsActive={ drilldown?.id === 'settings' }
 			/>

@@ -607,12 +607,14 @@
 
 @media (max-width: 782px) {
 	/* Collapse adminmenuwrap to nothing; override WP's display:none so our
-	   fixed children remain in the paint tree. */
+	   fixed children remain in the paint tree. Raise z-index above the overlay
+	   so the sidebar isn't swallowed by its own scrim. */
 	#adminmenuwrap {
 		display: block !important;
 		width: 0 !important;
 		height: 0 !important;
 		overflow: visible !important;
+		z-index: 9992 !important;
 	}
 
 	/* Content fills full width; bottom padding clears the bottom bar. */

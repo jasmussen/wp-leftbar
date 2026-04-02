@@ -1,5 +1,5 @@
 import { createPortal } from 'react-dom';
-import { menu, create, cog } from '@wordpress/icons';
+import { menu, verse, cog } from '@wordpress/icons';
 
 export default function BottomBar( { adminUrl, isNavOpen, onMenuToggle, onSettings, settingsActive } ) {
 	return createPortal(
@@ -26,7 +26,7 @@ export default function BottomBar( { adminUrl, isNavOpen, onMenuToggle, onSettin
 					href={ `${ adminUrl }post-new.php` }
 					aria-label="New post"
 				>
-					<span className="wn-bottombar__icon" aria-hidden="true">{ create }</span>
+					<span className="wn-bottombar__icon" aria-hidden="true">{ verse }</span>
 					<span className="wn-bottombar__label">New post</span>
 				</a>
 				<button
