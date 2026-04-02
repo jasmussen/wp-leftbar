@@ -686,6 +686,12 @@
 	fill: currentColor;
 }
 
-.wn-bottombar__btn--active {
+.wn-bottombar__btn:hover {
+	color: var( --wn-text-sub );
+	text-decoration: none;
+}
+
+.wn-bottombar__btn--active,
+.wn-bottombar__btn--active:hover {
 	color: var( --wn-text );
 }
