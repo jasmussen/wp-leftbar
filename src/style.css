@@ -281,18 +281,18 @@
 	fill: currentColor;
 }
 
-/* Legacy plugin icons (dashicons/img) — 20×20 centred in the 24×24 frame */
+/* Legacy plugin icons (dashicons/img) — 24×24 */
 .wn-item__icon--legacy .dashicons {
-	width: 20px;
-	height: 20px;
-	font-size: 20px;
+	width: 24px;
+	height: 24px;
+	font-size: 24px;
 	line-height: 1;
 }
 
 .wn-item__icon--mask {
 	display: block;
-	width: 20px;
-	height: 20px;
+	width: 24px;
+	height: 24px;
 	background-color: currentColor;
 	-webkit-mask-image: var(--icon-src);
 	-webkit-mask-size: contain;
@@ -306,8 +306,8 @@
 
 /* Force inline SVGs from plugins to use currentColor */
 .wn-item__icon--legacy svg {
-	width: 20px;
-	height: 20px;
+	width: 24px;
+	height: 24px;
 	display: block;
 	fill: currentColor !important;
 }
@@ -680,8 +680,8 @@
 }
 
 .wn-bottombar__icon svg {
-	width: 20px;
-	height: 20px;
+	width: 24px;
+	height: 24px;
 	display: block;
 	fill: currentColor;
 }
