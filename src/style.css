@@ -673,10 +673,16 @@
 	border: none;
 	color: var( --wn-text-sub );
 	font-size: 11px;
+	line-height: 1;
 	font-family: var( --wn-font );
 	cursor: pointer;
 	padding: 0;
 	text-decoration: none;
+}
+
+.wn-bottombar__label {
+	display: block;
+	line-height: 13px;
 }
 
 .wn-bottombar__icon svg {
