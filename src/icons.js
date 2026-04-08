@@ -51,6 +51,7 @@ export const DRILL_ICONS = {
 	'themes.php?page=gutenberg-fonts':  typography,
 	'admin.php?page=font-library-wp-admin': typography,
 	'font-library-wp-admin':            typography,
+	'font-library.php':                 typography,
 
 	// Settings
 	'options-general.php':    settings,
@@ -62,6 +63,6 @@ export const DRILL_ICONS = {
 	'options-privacy.php':    shield,
 	'users.php':                        people,
 	'tools.php':                        tool,
-	'options-connectors-wp-admin':      connection,
+	'options-connectors.php':           connection,
 	'ai':                               starFilled,
 };
